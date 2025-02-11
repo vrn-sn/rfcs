@@ -25,39 +25,48 @@ At a bare minimum, a library must comprise three components: a root container, a
 
 ### Configuration File
 
-The configuration file, named `libconfig.luon`, is written in Luau's syntax and must return a table containing the library's metadata and settings.
+The configuration file, named `metadata.luon`, contains a Luau table literal with the library's metadata and settings.
 This file must be placed in the root directory of the library.
 
-Below is an example of what a `libconfig.luon` file might look like.
+Below is an example of what a `metadata.luon` file might look like.
 
-```lua
-local libMetadata = { 
-    -- library metadata (example given later)
-}
-
-local libConfig = {
-    -- library configuration (example given later)
-}
-
-local libDependencies = {
-    -- runtime dependencies (example given later)
-}
-
-local libDistribution = {
-    -- distribution information (example given later)
-}
-
-return {
-    metadata = libMetadata
-    config = libConfig
-    dependencies = libDependencies
-    distribution = libDistribution
+```luau
+{
+    metadata = {
+        name = "example-library",
+        version = "1.0.0",
+        description = "An example Luau library",
+        license = "MIT",
+        author = "Person Doe",
+        keywords = {"example", "library", "luau"},
+    }
+    config = {
+        entry = "./src/init.luau",
+        luaurc = {
+            languageMode = "strict",
+            lint = {
+                "*": true,
+                "LocalUnused": false
+            },
+            lintErrors = true,
+            globals = {},
+            aliases = {}
+        }
+    }
+    dependencies = {
+        dependency1 = "2.0.0",
+        dependency2 = ">=1.2.0 <=1.5.0"
+    }
+    distribution = {
+        repository = "https://github.com/author/example-library",
+        documentation = "https://github.com/author/example-library#readme"
+    }
 }
 ```
 
 #### Metadata
 
-The metadata section includes essential information about the library:
+The metadata table includes essential information about the library:
 
 - `name`: The name of the library. This should be unique within the ecosystem.
 - `version`: The version of the library, following semantic versioning.
@@ -66,74 +75,30 @@ The metadata section includes essential information about the library:
 - `author`: The name of the author or maintainer of the library.
 - `keywords`: A list of keywords that describe the library and can help in its discovery.
 
-Example:
-
-```lua
-local libMetadata = {
-    name = "example-library",
-    version = "1.0.0",
-    description = "An example Luau library",
-    license = "MIT",
-    author = "Person Doe",
-    keywords = {"example", "library", "luau"},
-}
-```
-
 #### Configuration
 
-The configuration section specifies settings relevant to the interaction, execution, and development of the library:
+The configuration table specifies settings relevant to the interaction, execution, and development of the library:
 
 - `entry`: The path to the entry point script of the library, relative to `libconfig.luon`.
 - `luaurc`: A table containing settings that appear in `.luaurc` files outside of a library context.
 Similar to `.luaurc`, these settings apply to the contents of the library's root directory.
 
-Example:
-
-```lua
-local libConfig = {
-    entry = "./src/init.luau",
-    luaurc = {
-        languageMode = "strict",
-        lint = {
-            "*": true,
-            "LocalUnused": false
-        },
-        lintErrors = true,
-        globals = {},
-        aliases = {}
-    }
-}
-```
-
 #### Dependencies
 
-The dependencies section lists other libraries that this library depends on, along with their versions.
+The dependencies table lists other libraries that this library depends on, along with their versions.
 Every key in this table is the name of another library, with compatible versions stored under each key.
-
-Example:
-
-```lua
-local libDependencies = {
-    dependency1 = "2.0.0",
-    dependency2 = ">=1.2.0 <=1.5.0"
-}
-```
 
 #### Distribution
 
-The distribution section provides information on where the library's source code and documentation can be found:
+The distribution table provides information on where the library's source code and documentation can be found:
 
 - `repository`: The URL of the repository hosting the library's source code.
 - `documentation`: The URL of the library's documentation.
 
-Example:
+#### Additional fields
 
-```lua
-local libDistribution = {
-    repository = "https://github.com/author/example-library",
-    documentation = "https://github.com/author/example-library#readme"
-}
-```
+This is the bare minimum that the Luau specification defines for a library.
+However, other tools and frameworks are free to require additional fields and properties to support their specific use cases and requirements.
 
 ## Drawbacks
 
